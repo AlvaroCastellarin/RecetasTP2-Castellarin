@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, Navigate, useLocation, useNavigate, type Location } from "react-router";
 import { loginSchema, type LoginFormValues } from "../schemas/auth.schema";
 import { signIn, useSession } from "../lib/auth-client";
+import { safeRedirect } from "../lib/session-redirect";
 import { FormField, inputClass } from "../components/FormField";
 import { SocialButtons } from "../components/SocialButtons";
 
@@ -26,11 +27,15 @@ export const Login = () => {
   });
 
   // URL completa a la que queria ir antes del login, CON el query string (ej: /?vegetarian=true).
+  // Llega por state (ProtectedRoute) o por ?redirect= (sesion vencida en medio de una accion).
+  const params = new URLSearchParams(location.search);
   const fromLocation = (location.state as { from?: Location } | null)?.from;
-  const from = fromLocation
-    ? `${fromLocation.pathname}${fromLocation.search}${fromLocation.hash}`
-    : "/";
-  const oauthError = new URLSearchParams(location.search).get("error");
+  const from =
+    (fromLocation && `${fromLocation.pathname}${fromLocation.search}${fromLocation.hash}`) ||
+    safeRedirect(params.get("redirect")) ||
+    "/";
+  const oauthError = params.get("error");
+  const sessionExpired = params.get("expired") === "1";
 
   if (session && !isSubmitting) {
     return <Navigate to={from} replace />;
@@ -53,6 +58,11 @@ export const Login = () => {
       <section className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-bold text-brand-700">Recetario</h1>
         <h2 className="mt-1 mb-4 text-xl font-semibold text-slate-900">Iniciar sesión</h2>
+        {sessionExpired && !oauthError && (
+          <p role="alert" className="mb-4 rounded bg-amber-50 p-3 text-sm text-amber-800">
+            Tu sesión venció o fue cerrada. Volvé a iniciar sesión para continuar.
+          </p>
+        )}
         {oauthError && (
           <p role="alert" className="mb-4 rounded bg-amber-50 p-3 text-sm text-amber-800">
             {OAUTH_ERRORS[oauthError] ?? "No se pudo iniciar sesión con el proveedor externo."}
