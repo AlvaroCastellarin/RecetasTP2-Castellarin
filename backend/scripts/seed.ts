@@ -114,6 +114,26 @@ const SAMPLE_RECIPES = [
     publishedAt: new Date("2026-10-05"),
   },
   {
+    title: "Fideos moñito con crema, jamón y arvejas",
+    description:
+      "Moñitos al dente en una salsa cremosa de jamón cocido y arvejas, terminados con queso rallado. Rápidos y rendidores.",
+    ingredients: [
+      "500 g de fideos moñito",
+      "200 ml de crema de leche",
+      "150 g de jamón cocido en cubos",
+      "1 lata de arvejas",
+      "1 cebolla",
+      "1 cucharada de manteca",
+      "Queso rallado",
+      "Sal, pimienta y nuez moscada",
+    ],
+    prepMinutes: 25,
+    servings: 4,
+    difficulty: "facil",
+    vegetarian: false,
+    publishedAt: new Date("2026-11-21"),
+  },
+  {
     title: "Chipa",
     description: "Pancitos de queso tipicos del litoral, crocantes por fuera y tiernos por dentro.",
     ingredients: ["500 g de almidon de mandioca", "250 g de queso", "2 huevos", "100 g de manteca", "Leche"],
