@@ -1,8 +1,8 @@
 # Recetario — TP2 Desarrollo y Metodologías Web
 
-App full-stack para consultar y administrar **recetas de cocina**. Cualquiera puede buscar y ver recetas;
-los usuarios registrados inician sesión con email/contraseña, GitHub o Google, y los **administradores**
-cargan, editan y eliminan recetas y gestionan los roles de los demás usuarios.
+App full-stack para consultar y administrar **recetas de cocina**. Para entrar hay que iniciar sesión
+(email/contraseña, GitHub o Google): los usuarios con rol `user` pueden buscar y ver recetas, y los
+**administradores** además cargan, editan y eliminan recetas y gestionan los roles de los demás usuarios.
 
 Stack: **Express 5 + TypeScript + MongoDB (Mongoose)** · **Better Auth** (email, GitHub, Google, plugin admin) ·
 **React 19 + Vite + React Router + RTK Query** · **React Hook Form + Zod** · **Tailwind** · deploy en **Render**.
@@ -47,8 +47,8 @@ Base: `/api`. Los errores tienen la forma `{ "success": false, "error": { "messa
 
 | Método | Ruta | Rol requerido | Respuestas |
 |---|---|---|---|
-| GET | `/api/recipes` | público | 200, 400 (query inválida) |
-| GET | `/api/recipes/:id` | público | 200, 400 (id inválido), 404 |
+| GET | `/api/recipes` | logueado (`user` o `admin`) | 200, 400 (query inválida), 401 |
+| GET | `/api/recipes/:id` | logueado (`user` o `admin`) | 200, 400 (id inválido), 401, 404 |
 | POST | `/api/recipes` | **admin** | 201, 400 (Zod), 401, 403 |
 | PUT | `/api/recipes/:id` | **admin** | 200, 400, 401, 403, 404 |
 | PATCH | `/api/recipes/:id` | **admin** | 200, 400, 401, 403, 404 |
@@ -56,8 +56,8 @@ Base: `/api`. Los errores tienen la forma `{ "success": false, "error": { "messa
 | * | `/api/auth/*` | — | Endpoints de Better Auth (sign-up, sign-in, OAuth, sesión, `admin/set-role`, `admin/list-users`…) |
 | GET | `/health` | público | 200 |
 
-Las rutas de escritura usan `authMiddleware` (401 sin sesión) + `requireRole("admin")` (403 sin permisos)
-+ `validateBody(schema)` (400 con el detalle de Zod).
+Las rutas de lectura usan `authMiddleware` (401 sin sesión). Las de escritura usan `authMiddleware` +
+`requireRole("admin")` (403 sin permisos) + `validateBody(schema)` (400 con el detalle de Zod).
 
 **Query params de `GET /api/recipes`** (búsqueda, filtros y paginación):
 
@@ -76,14 +76,23 @@ Respuesta: `{ "data": [...], "meta": { "total", "page", "limit", "totalPages" } 
 
 | Ruta | Acceso | Contenido |
 |---|---|---|
-| `/` | público | listado con búsqueda, filtros y paginación (los filtros viven en la URL) |
-| `/recipes/:id` | público | detalle de la receta |
+| `/` | logueado | listado con búsqueda, filtros y paginación (los filtros viven en la URL) |
+| `/recipes/:id` | logueado | detalle de la receta |
 | `/login`, `/register` | público | email/contraseña, GitHub y Google |
 | `/admin` | **admin** | ABM de recetas (React Hook Form + Zod) |
 | `/admin/usuarios` | **admin** | cambiar roles con `authClient.admin.setRole` |
 
-Un usuario sin sesión que entra a `/admin` va a `/login`; un usuario con rol `user` ve **"Sin permisos"**.
+Sin sesión, cualquier ruta (salvo `/login` y `/register`) redirige a `/login`, y después de iniciar sesión
+vuelve a la URL pedida **con su query string** (ej: `/?vegetarian=true`). Un usuario con rol `user` que
+entra a `/admin` ve **"Sin permisos"**.
 La sesión se lee con `useSession()`, así que se mantiene al recargar.
+
+### Sesiones (Better Auth en lugar de JWT)
+
+La autenticación usa **Better Auth**, como pide la consigna, en lugar del JWT con access/refresh token de
+las primeras clases. La sesión se guarda en Mongo (colección `session`) y el navegador recibe una cookie
+`httpOnly`. Cubre lo mismo que el par access/refresh: la sesión dura 7 días y se renueva sola con el uso,
+y además se puede **revocar** desde el servidor (logout real), cosa que un JWT no permite hasta que vence.
 
 ## Correr en local
 
