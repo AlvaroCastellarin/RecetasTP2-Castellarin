@@ -87,6 +87,11 @@ Respuesta: `{ "data": [...], "meta": { "total", "page", "limit", "totalPages" } 
 Sin sesión, cualquier ruta (salvo `/login` y `/register`) redirige a `/login`, y después de iniciar sesión
 vuelve a la URL pedida **con su query string** (ej: `/?vegetarian=true`). Un usuario con rol `user` que
 entra a `/admin` ve **"Sin permisos"**.
+
+Si la sesión vence o un admin la revoca mientras el usuario está usando la app, **cualquier acción**
+(buscar, abrir una receta, guardar, etc.) recibe 401 y la app lo manda al login con el aviso "Tu sesión
+venció". Al volver a entrar, retoma la misma pantalla. Lo hacen un interceptor de axios (`lib/api.ts`)
+y el `onError` del cliente de Better Auth (`lib/auth-client.ts`).
 La sesión se lee con `useSession()`, así que se mantiene al recargar.
 
 ### Sesiones (Better Auth en lugar de JWT)
