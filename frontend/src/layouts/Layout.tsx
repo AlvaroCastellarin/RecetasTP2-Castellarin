@@ -39,6 +39,9 @@ export const Layout = () => {
                 <NavLink to="/admin/usuarios" className={navClass}>
                   Usuarios
                 </NavLink>
+                <NavLink to="/admin/sesiones" className={navClass}>
+                  Sesiones
+                </NavLink>
               </>
             )}
             {!isPending && !user && (
@@ -56,9 +59,9 @@ export const Layout = () => {
             )}
             {user && (
               <>
-                <span className="hidden px-2 text-sm text-white/80 sm:inline">
+                <NavLink to="/perfil" className={navClass}>
                   {user.name} · {user.role ?? "user"}
-                </span>
+                </NavLink>
                 <button
                   type="button"
                   onClick={handleLogout}

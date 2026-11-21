@@ -9,6 +9,8 @@ import { Login } from "../pages/Login";
 import { Register } from "../pages/Register";
 import { AdminRecipes } from "../pages/admin/AdminRecipes";
 import { AdminUsers } from "../pages/admin/AdminUsers";
+import { AdminSessions } from "../pages/admin/AdminSessions";
+import { Profile } from "../pages/Profile";
 import { NotFound } from "../pages/NotFound";
 
 export const router = createBrowserRouter([
@@ -26,6 +28,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <Home /> },
           { path: "recipes/:id", element: <RecipeDetail /> },
+          { path: "perfil", element: <Profile /> },
         ],
       },
 
@@ -38,6 +41,7 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <AdminRecipes /> },
               { path: "usuarios", element: <AdminUsers /> },
+              { path: "sesiones", element: <AdminSessions /> },
             ],
           },
         ],
