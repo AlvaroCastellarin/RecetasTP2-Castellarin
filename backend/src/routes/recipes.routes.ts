@@ -14,9 +14,9 @@ import { authMiddleware, requireRole } from "../middlewares/auth.middleware.js";
 const router = Router();
 const onlyAdmin = [authMiddleware, requireRole("admin")];
 
-// Lectura: publica
-router.get("/", listRecipes);
-router.get("/:id", getRecipeById);
+// Lectura: cualquier usuario logueado (401 sin sesion)
+router.get("/", authMiddleware, listRecipes);
+router.get("/:id", authMiddleware, getRecipeById);
 
 // Escritura: solo admin (401 sin sesion, 403 sin rol admin, 400 si Zod rechaza el body)
 router.post("/", onlyAdmin, validateBody(createRecipeSchema), createRecipe);
