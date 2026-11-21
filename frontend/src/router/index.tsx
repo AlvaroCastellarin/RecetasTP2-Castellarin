@@ -1,5 +1,7 @@
-// Arbol de rutas centralizado (data router). Solo /login y /register son publicas;
-// el resto pide sesion, y /admin ademas pide rol admin.
+// Arbol de rutas centralizado (data router).
+// Solo /login y /register son publicas. TODO lo demas (incluida cualquier URL inventada) esta
+// adentro de <ProtectedRoute />: sin sesion → /login, y despues del login vuelve a la URL pedida.
+// /admin/* ademas pide rol admin.
 import { createBrowserRouter } from "react-router";
 import { Layout } from "../layouts/Layout";
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -14,40 +16,42 @@ import { Profile } from "../pages/Profile";
 import { NotFound } from "../pages/NotFound";
 
 export const router = createBrowserRouter([
-  // Fuera del Layout: pantalla completa, sin header
+  // Publicas, fuera del Layout: pantalla completa, sin header
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
 
+  // Guard global: envuelve al Layout, asi sin sesion no se llega a dibujar ni el header.
   {
-    path: "/",
-    element: <Layout />,
+    element: <ProtectedRoute />,
     children: [
-      // Cualquier usuario logueado (user o admin). Sin sesion → /login, y despues vuelve a la URL pedida.
       {
-        element: <ProtectedRoute />,
+        path: "/",
+        element: <Layout />,
         children: [
+          // Cualquier usuario logueado (user o admin)
           { index: true, element: <Home /> },
           { path: "recipes/:id", element: <RecipeDetail /> },
           { path: "perfil", element: <Profile /> },
-        ],
-      },
 
-      // Solo admin
-      {
-        element: <ProtectedRoute roles={["admin"]} />,
-        children: [
+          // Solo admin: un user logueado ve "Sin permisos"
           {
-            path: "admin",
+            element: <ProtectedRoute roles={["admin"]} />,
             children: [
-              { index: true, element: <AdminRecipes /> },
-              { path: "usuarios", element: <AdminUsers /> },
-              { path: "sesiones", element: <AdminSessions /> },
+              {
+                path: "admin",
+                children: [
+                  { index: true, element: <AdminRecipes /> },
+                  { path: "usuarios", element: <AdminUsers /> },
+                  { path: "sesiones", element: <AdminSessions /> },
+                ],
+              },
             ],
           },
+
+          // 404: tambien protegido, una URL inexistente sin sesion lleva al login
+          { path: "*", element: <NotFound /> },
         ],
       },
-
-      { path: "*", element: <NotFound /> },
     ],
   },
 ]);
