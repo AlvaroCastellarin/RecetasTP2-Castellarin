@@ -114,7 +114,7 @@ const SAMPLE_RECIPES = [
     publishedAt: new Date("2026-10-05"),
   },
   {
-    title: "Fideos moñito con crema, jamón y arvejas",
+    title: "Alto Guiso",
     description:
       "Moñitos al dente en una salsa cremosa de jamón cocido y arvejas, terminados con queso rallado. Rápidos y rendidores.",
     ingredients: [
