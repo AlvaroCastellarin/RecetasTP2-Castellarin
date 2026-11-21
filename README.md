@@ -13,7 +13,7 @@ Stack: **Express 5 + TypeScript + MongoDB (Mongoose)** · **Better Auth** (email
 |---|---|
 | Frontend (Static Site) | `https://<COMPLETAR>.onrender.com` |
 | Backend (Web Service) | `https://<COMPLETAR>.onrender.com` |
-| Repositorio | `https://github.com/<COMPLETAR>` |
+| Repositorio | https://github.com/AlvaroCastellarin/RecetasTP2-Castellarin |
 
 > El backend está en el plan free de Render: si estuvo 15 minutos sin uso, el primer request tarda ~50 s.
 
