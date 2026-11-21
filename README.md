@@ -79,8 +79,10 @@ Respuesta: `{ "data": [...], "meta": { "total", "page", "limit", "totalPages" } 
 | `/` | logueado | listado con búsqueda, filtros y paginación (los filtros viven en la URL) |
 | `/recipes/:id` | logueado | detalle de la receta |
 | `/login`, `/register` | público | email/contraseña, GitHub y Google |
+| `/perfil` | logueado | datos de la cuenta y vincular Google / GitHub (`authClient.linkSocial`) |
 | `/admin` | **admin** | ABM de recetas (React Hook Form + Zod) |
 | `/admin/usuarios` | **admin** | cambiar roles con `authClient.admin.setRole` |
+| `/admin/sesiones` | **admin** | ver las sesiones abiertas de cada usuario y revocarlas |
 
 Sin sesión, cualquier ruta (salvo `/login` y `/register`) redirige a `/login`, y después de iniciar sesión
 vuelve a la URL pedida **con su query string** (ej: `/?vegetarian=true`). Un usuario con rol `user` que
@@ -93,6 +95,7 @@ La autenticación usa **Better Auth**, como pide la consigna, en lugar del JWT c
 las primeras clases. La sesión se guarda en Mongo (colección `session`) y el navegador recibe una cookie
 `httpOnly`. Cubre lo mismo que el par access/refresh: la sesión dura 7 días y se renueva sola con el uso,
 y además se puede **revocar** desde el servidor (logout real), cosa que un JWT no permite hasta que vence.
+El admin lo hace desde `/admin/sesiones`: la sesión revocada recibe 401 en su próximo request.
 
 ## Correr en local
 
@@ -193,3 +196,5 @@ frontend/
 - Búsqueda, filtros (dificultad, vegetariana, tiempo máximo) y paginación en el listado.
 - Login con Google además de GitHub.
 - Página de admin para cambiar roles (`authClient.admin.setRole`).
+- Página de admin para ver y revocar sesiones (`authClient.admin.listUserSessions` / `revokeUserSession`).
+- Perfil con vinculación de Google y GitHub a una cuenta creada con email y contraseña.
