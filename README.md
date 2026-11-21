@@ -11,8 +11,8 @@ Stack: **Express 5 + TypeScript + MongoDB (Mongoose)** · **Better Auth** (email
 
 | | URL |
 |---|---|
-| Frontend (Static Site) | `https://<COMPLETAR>.onrender.com` |
-| Backend (Web Service) | `https://<COMPLETAR>.onrender.com` |
+| Frontend (Static Site) | https://recetas-tp2-castellarin.onrender.com |
+| Backend (Web Service) | https://recetas-web-sdpu.onrender.com |
 | Repositorio | https://github.com/AlvaroCastellarin/RecetasTP2-Castellarin |
 
 > El backend está en el plan free de Render: si estuvo 15 minutos sin uso, el primer request tarda ~50 s.
@@ -140,8 +140,8 @@ del mismo origen y no hace falta CORS.
 
 | Proveedor | Local | Producción |
 |---|---|---|
-| GitHub (OAuth App) | `http://localhost:5173/api/auth/callback/github` | `https://<front>.onrender.com/api/auth/callback/github` |
-| Google (OAuth Client, tipo Web) | `http://localhost:5173/api/auth/callback/google` | `https://<front>.onrender.com/api/auth/callback/google` |
+| GitHub (OAuth App) | `http://localhost:5173/api/auth/callback/github` | `https://recetas-tp2-castellarin.onrender.com/api/auth/callback/github` |
+| Google (OAuth Client, tipo Web) | `http://localhost:5173/api/auth/callback/google` | `https://recetas-tp2-castellarin.onrender.com/api/auth/callback/google` |
 
 GitHub acepta una sola callback por OAuth App: se usan dos apps (local y producción). En Google se
 pueden cargar las dos URIs en el mismo cliente, y en "Orígenes autorizados" las URLs del front.
@@ -154,7 +154,7 @@ pueden cargar las dos URIs en el mismo cliente, y en "Orígenes autorizados" las
    - Build Command: `npm install --include=dev && npm run build`
    - Start Command: `npm start`
    - Env: `NODE_ENV=production`, `NODE_VERSION=22`, `MONGODB_URI`, `BETTER_AUTH_SECRET` (uno nuevo),
-     `BETTER_AUTH_URL=https://<front>.onrender.com`, `GITHUB_CLIENT_ID/SECRET` (app de producción),
+     `BETTER_AUTH_URL=https://recetas-tp2-castellarin.onrender.com`, `GITHUB_CLIENT_ID/SECRET` (app de producción),
      `GOOGLE_CLIENT_ID/SECRET`.
 3. **Frontend — Static Site**
    - Root Directory: `frontend`
@@ -165,7 +165,7 @@ pueden cargar las dos URIs en el mismo cliente, y en "Orígenes autorizados" las
 
      | Source | Destination | Action |
      |---|---|---|
-     | `/api/*` | `https://<back>.onrender.com/api/*` | Rewrite |
+     | `/api/*` | `https://recetas-web-sdpu.onrender.com/api/*` | Rewrite |
      | `/*` | `/index.html` | Rewrite |
 
    La primera regla hace que el front llame siempre a `/api` (como el proxy de Vite); la segunda hace
