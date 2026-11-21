@@ -25,7 +25,11 @@ export const Login = () => {
     defaultValues: { email: "", password: "" },
   });
 
-  const from = (location.state as { from?: Location } | null)?.from?.pathname ?? "/";
+  // URL completa a la que queria ir antes del login, CON el query string (ej: /?vegetarian=true).
+  const fromLocation = (location.state as { from?: Location } | null)?.from;
+  const from = fromLocation
+    ? `${fromLocation.pathname}${fromLocation.search}${fromLocation.hash}`
+    : "/";
   const oauthError = new URLSearchParams(location.search).get("error");
 
   if (session && !isSubmitting) {
@@ -47,10 +51,8 @@ export const Login = () => {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 p-6 font-sans">
       <section className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <Link to="/" className="text-sm text-slate-500 underline">
-          ← Recetario
-        </Link>
-        <h2 className="mt-2 mb-4 text-xl font-semibold text-slate-900">Iniciar sesión</h2>
+        <h1 className="text-2xl font-bold text-brand-700">Recetario</h1>
+        <h2 className="mt-1 mb-4 text-xl font-semibold text-slate-900">Iniciar sesión</h2>
         {oauthError && (
           <p role="alert" className="mb-4 rounded bg-amber-50 p-3 text-sm text-amber-800">
             {OAUTH_ERRORS[oauthError] ?? "No se pudo iniciar sesión con el proveedor externo."}

@@ -17,7 +17,7 @@ export const Layout = () => {
       alert(error.message ?? "No se pudo cerrar sesión");
       return;
     }
-    window.location.replace("/");
+    window.location.replace("/login");
   };
 
   return (

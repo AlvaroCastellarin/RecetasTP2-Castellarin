@@ -1,4 +1,5 @@
-// Arbol de rutas centralizado (data router). Publico, y privado por rol (admin).
+// Arbol de rutas centralizado (data router). Solo /login y /register son publicas;
+// el resto pide sesion, y /admin ademas pide rol admin.
 import { createBrowserRouter } from "react-router";
 import { Layout } from "../layouts/Layout";
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -19,9 +20,14 @@ export const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
-      // Publicas
-      { index: true, element: <Home /> },
-      { path: "recipes/:id", element: <RecipeDetail /> },
+      // Cualquier usuario logueado (user o admin). Sin sesion → /login, y despues vuelve a la URL pedida.
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { index: true, element: <Home /> },
+          { path: "recipes/:id", element: <RecipeDetail /> },
+        ],
+      },
 
       // Solo admin
       {

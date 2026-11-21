@@ -41,10 +41,8 @@ export const Register = () => {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 p-6 font-sans">
       <section className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <Link to="/" className="text-sm text-slate-500 underline">
-          ← Recetario
-        </Link>
-        <h2 className="mt-2 mb-4 text-xl font-semibold text-slate-900">Crear cuenta</h2>
+        <h1 className="text-2xl font-bold text-brand-700">Recetario</h1>
+        <h2 className="mt-1 mb-4 text-xl font-semibold text-slate-900">Crear cuenta</h2>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3">
           <FormField label="Nombre" error={errors.name?.message}>
             <input
