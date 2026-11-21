@@ -41,6 +41,12 @@ export const auth = betterAuth({
   account: {
     accountLinking: { trustedProviders: ["github", "google"] },
   },
+  // Detras del proxy de Render (y del rewrite del Static Site) la IP del visitante llega en
+  // X-Forwarded-For. Sin esto el rate limit de Better Auth usa UN contador compartido por todos
+  // los usuarios, y unos pocos logins fallidos bloquearian el login para cualquiera.
+  advanced: {
+    ipAddress: { ipAddressHeaders: ["x-forwarded-for", "x-real-ip"] },
+  },
   // admin(): agrega user.role ("user" por defecto) y endpoints para listar usuarios y cambiar roles.
   plugins: [admin()],
 });
